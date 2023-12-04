@@ -14,9 +14,9 @@ public class WebController {
     @Autowired
     WebBc bc;
 
-    //  public WebController(WebBc bc) {
-    //      this.bc = bc;
-    //  }
+    public WebController(WebBc bc) {
+        this.bc = bc;
+    }
 
     @GetMapping("/home") // @GetMapping("/")
     public ModelAndView getHome() {
@@ -35,17 +35,20 @@ public class WebController {
     }
 
     @PostMapping("/login")
-    public ModelAndView login(String name, String password) {
+    public ModelAndView login(String uname, String psw) {
 
-        boolean isLoginValid = true; //bc.login(name, password);
+        // aceder à business component para validar o login
+        boolean isLoginValid = bc.isLoginValid(uname, psw);
 
+        // uma vez que o login é válido procedemos ao login
+        ModelAndView mv = new ModelAndView("index");
         if (isLoginValid) {
-            ModelAndView mv = new ModelAndView("index");
             // aceder à business component > acede ao repositorio > obtem dados
-            mv.addObject("name", "Vania");
-            return mv;
+            mv.addObject("loginValid", "O Login é válido.");
+        } else {
+            mv.addObject("loginValid", "O Login é inválido.");
         }
-        return null;
+        return mv;
     }
 
 
